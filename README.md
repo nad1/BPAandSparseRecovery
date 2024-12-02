@@ -1,4 +1,5 @@
 SparseRecovery.m 
+-------------------------------------------------------------------------
 Step 1: Loading and Preparing Data
 Input Data Source:
 
@@ -15,8 +16,12 @@ To reduce polarization bias between X and Z antenna polarizations, data from the
 Downsampling:
 
 Downsampling is applied to reduce memory usage, especially for large datasets such as those with a 4 ns time window and 1040 samples per A-scan. The downsampling factor is defined to retain essential features.
+
+-------------------------------------------------------------------------
 Step 2: Random Sampling of A-Scans
 Randomly selects A-scan columns from the C-scan data matrix based on the randomascannumber parameter. This step simulates random sampling for sparse recovery.
+
+-------------------------------------------------------------------------
 Step 3: Defining Parameters
 Resolution and Antenna Location:
 
@@ -29,6 +34,8 @@ M corresponds to the measurement size, which is unused by default.
 Ricker Waveform Parameters:
 
 zeta and chi are derived based on the Ricker waveform used in the simulations.
+
+-------------------------------------------------------------------------
 Step 4: Construction of Sparse Matrices
 Psi_total Construction Loop:
 
@@ -46,6 +53,8 @@ Measurement matrix Phi and response matrix Beta are optionally generated for mea
 Matrix Merging:
 
 Psi_i, Phi, and Beta are merged to form Psi_total, Phi_total, and Beta_total.
+
+-------------------------------------------------------------------------
 Step 5: Sparse Recovery via Dantzig Selector
 Data Preparation:
 
@@ -58,6 +67,8 @@ Iteratively minimizes the L1 norm of b using CVX, subject to constraints on the 
 Reshaping Results:
 
 The recovered 1D matrix b is reshaped into the original data format for visualization or further analysis.
+
+-------------------------------------------------------------------------
 Step 6: Visualization
 Optional visualization displays:
 The original input data.
