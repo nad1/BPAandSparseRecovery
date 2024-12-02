@@ -1,3 +1,4 @@
+-------------------------------------------------------------------------
 SparseRecovery.m 
 -------------------------------------------------------------------------
 Step 1: Loading and Preparing Data
@@ -68,8 +69,13 @@ Reshaping Results:
 
 The recovered 1D matrix b is reshaped into the original data format for visualization or further analysis.
 
-
+-------------------------------------------------------------------------
 RawBackProjection.m 
 -------------------------------------------------------------------------
 
 This code is to apply back-projection on the same dataset used in sparse recovery. Through simulating the random sampling it's the same as SparseRecovery.m, but this code uses a coordinates.csv file. It creates a 3D image domain, then it caluclates the round trip delay time between the focused cell and scan positions respectively. According to the delay value it pulls data from the related scan point, then sums them. It goes thorug every cell in the same way, then visualizes in both 2D layers and 3D.
+
+-------------------------------------------------------------------------
+BPAonDatafromSparseRecovery.m
+-------------------------------------------------------------------------
+It's the same logic as RawBackProjection.m, but the input comes from the found b value from the SparseRecovery.m. It reconstructs the response scan dataset by multiplying with the calculated Psi_total(in SparseRecovery.m), then converts it into a 2D dataset. Then applies back-projection.
