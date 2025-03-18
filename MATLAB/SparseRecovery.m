@@ -188,7 +188,7 @@ data1d = reshape(data, Nt*Q, 1);
 
 
 % Save variables to a .mat file
-mat_filename = sprintf('random%d.mat', randomizer);
+mat_filename = sprintf('random%d.mat', factor);
 save(mat_filename, 'Phi_total', 'Beta_total', 'data1d', 'Psi_total', 'Nt', 'Q', 'M', '-v7.3');
 
 %% Dantzig selector with cross-validation
