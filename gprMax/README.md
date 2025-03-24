@@ -6,6 +6,7 @@ gprMax does not natively support C-scan simulations. However, you can emulate C-
 
 - **`3multi3d.in`** – Sample simulation setup file located in the `user_models` directory.
 - **`cscan.bh`** – Automates multiple B-scan simulations by incrementally adjusting the antenna’s z-position.
+- > ℹ️ The **step size** used to increase the z-axis is automatically extracted from the `.in` file.
 - **`runc.sh`** – Ensures `cscan.bh` is in the correct Unix format and runs the script.
 
 > ⚠️ Note: Editing `cscan.bh` on Windows may result in incompatible line endings. `runc.sh` will convert it automatically before running.
