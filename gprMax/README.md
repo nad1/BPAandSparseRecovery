@@ -26,7 +26,8 @@ gprMax does not natively support C-scan simulations. However, you can emulate C-
      ```bash
      ./runc.sh
      ```
-
+> 🧩 The output file is a **2D data array** where each B-scan is appended to the end of the previous one.  
+> This creates a vertically stacked structure of B-scan layers, effectively forming a simulated C-scan dataset.
 ---
 
 ## 🔁 Antenna Polarization Control
