@@ -1,3 +1,18 @@
+## 📘 Citation & Acknowledgment
+
+This repository contains the source code associated with the following thesis:
+
+**Nihat Alperen Dayanir**  
+*GPR 3D Image Reconstruction with Sparse Recovery for Random Spatial Sampling*  
+Graduate College Dissertations and Theses. 1982, University of Vermont, 2025.  
+[https://scholarworks.uvm.edu/graddis/1982](https://scholarworks.uvm.edu/graddis/1982)
+
+If you find this work helpful in your research or projects and would like to cite it,  
+please consider using the following citation:
+
+> Dayanir, Nihat Alperen. "GPR 3D Image Reconstruction with Sparse Recovery for Random Spatial Sampling." Graduate College Dissertations and Theses. 1982 (2025). [https://scholarworks.uvm.edu/graddis/1982](https://scholarworks.uvm.edu/graddis/1982)
+
+
 -------------------------------------------------------------------------
 SparseRecovery.m 
 -------------------------------------------------------------------------
