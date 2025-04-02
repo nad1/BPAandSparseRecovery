@@ -13,84 +13,98 @@ please consider using the following citation:
 > Dayanir, Nihat Alperen. "GPR 3D Image Reconstruction with Sparse Recovery for Random Spatial Sampling." Graduate College Dissertations and Theses. 1982 (2025). [https://scholarworks.uvm.edu/graddis/1982](https://scholarworks.uvm.edu/graddis/1982)
 
 
--------------------------------------------------------------------------
-SparseRecovery.m 
--------------------------------------------------------------------------
-Step 1: Loading and Preparing Data
-Input Data Source:
+---
 
-The grid C-scan data is obtained from gprMax simulations or real data. The data must be in 2D format, where each layer is appended sequentially, forming a 3D dataset represented as a 2D matrix.
-The code reads 2D data from CSV files using the readmatrix function.
-Direct Coupling Removal:
+## 📁 SparseRecovery.m
 
-Direct coupling is mitigated using either:
-A mean square subtraction method.
-Subtraction of scan data from the same domain without any targets.
-Polarization Bias Adjustment:
+### 🧩 Step 1: Loading and Preparing Data
 
-To reduce polarization bias between X and Z antenna polarizations, data from the same domain with different polarizations is summed. This adjustment is significant in simulation data but not yet tested with real data.
-Downsampling:
+#### Input Data Source:
 
-Downsampling is applied to reduce memory usage, especially for large datasets such as those with a 4 ns time window and 1040 samples per A-scan. The downsampling factor is defined to retain essential features.
+- The grid C-scan data is obtained from gprMax simulations or real data. The data must be in 2D format, where each layer is appended sequentially, forming a 3D dataset represented as a 2D matrix.
+- The code reads 2D data from CSV files using the readmatrix function.
 
--------------------------------------------------------------------------
-Step 2: Random Sampling of A-Scans
+#### Preprocessing
+- **Direct Coupling Removal**:
+  Direct coupling is mitigated using either:
+  - Mean square subtraction, or
+  - Subtracting reference scan data with no targets.
+    
+- **Polarization Bias Adjustment**:
+  - For simulation data, combine X and Z polarization scans to reduce bias.
+  - Not yet tested on real data.
+
+- **Downsampling**:
+  - Useful for large scans (e.g., 4 ns time window, 1040 samples).
+  - A downsampling factor helps retain key features while reducing memory load.
+
+---
+
+### 🔁 Step 2: Random Sampling of A-Scans
 Randomly selects A-scan columns from the C-scan data matrix based on the randomascannumber parameter. This step simulates random sampling for sparse recovery.
 
--------------------------------------------------------------------------
-Step 3: Defining Parameters
-Resolution and Antenna Location:
+---
 
-ysize, xsize, and zsize specify the resolution of the image domain.
-zant defines the initial Z-axis location of the antenna, with the GPRMax convention where the Y-axis represents height.
-Sparse Matrix Construction:
+### ⚙️ Step 3: Defining Parameters
 
-Psi_total, Phi_total, and Beta_total are initialized in sparse format to save memory.
-M corresponds to the measurement size, which is unused by default.
-Ricker Waveform Parameters:
+#### Image Domain
+- `ysize`, `xsize`, `zsize`: Define resolution in each spatial axis.
+- `zant`: Starting depth of the antenna (Z-axis), with Y representing height (gprMax convention).
 
-zeta and chi are derived based on the Ricker waveform used in the simulations.
+#### Sparse Matrix Initialization
+- Sparse matrices: `Psi_total`, `Phi_total`, `Beta_total`.
+- `M`: Optional measurement size (typically unused).
 
--------------------------------------------------------------------------
-Step 4: Construction of Sparse Matrices
-Psi_total Construction Loop:
+#### Ricker Waveform Parameters
+- `zeta`, `chi`: Derived parameters defining the shape and timing of the waveform.
+
+
+---
+
+### 🧠 Step 4: Construction of Sparse Matrices
+#### Psi_total Construction Loop:
 
 A sparse matrix Psi_i is created for each scan point.
-For every cell in the 3D image domain:
-The cell position (xa, ya, za) is calculated.
-The round-trip delay time (Ti) from the cell to the scan point is determined.
-Corresponding Ricker waveform values are assigned in Psi_i, normalized by accumulated squared values of the signal.
-Thresholding and Sparsity:
+**For every cell in the 3D image domain:**
+- The cell position (xa, ya, za) is calculated.
+- The round-trip delay time (Ti) from the cell to the scan point is determined.
+- Corresponding Ricker waveform values are assigned in Psi_i, normalized by accumulated squared values of the signal.
+  
+#### Thresholding and Sparsity:
+- Values below 0.03 V in Psi_i are set to zero to enhance sparsity and reduce memory usage.
 
-Values below 0.03 V in Psi_i are set to zero to enhance sparsity and reduce memory usage.
-Optional Matrices (Phi, Beta):
+#### Optional Matrices (Phi, Beta):
+- Measurement matrix Phi and response matrix Beta are optionally generated for measurement matrix use cases.
 
-Measurement matrix Phi and response matrix Beta are optionally generated for measurement matrix use cases.
-Matrix Merging:
+#### Matrix Merging:
+- Psi_i, Phi, and Beta are merged to form Psi_total, Phi_total, and Beta_total.
 
-Psi_i, Phi, and Beta are merged to form Psi_total, Phi_total, and Beta_total.
 
--------------------------------------------------------------------------
-Step 5: Sparse Recovery via Dantzig Selector
-Data Preparation:
+---
 
-The reshaped input data (data1d) serves as the known radar response.
-Sparse recovery solves for b, the unknown image domain matrix.
-Cross-Validation Process:
+### 📉 Step 5: Sparse Recovery via Dantzig Selector
+#### Data Preparation:
+- The reshaped input data (data1d) serves as the known radar response.
+- Sparse recovery solves for b, the unknown image domain matrix.
 
-Initializes alpha to estimate the initial epsilon.
-Iteratively minimizes the L1 norm of b using CVX, subject to constraints on the residuals.
-Reshaping Results:
+#### Cross-Validation Process:
+- Initializes alpha to estimate the initial epsilon.
+- Iteratively minimizes the L1 norm of b using CVX, subject to constraints on the residuals.
 
-The recovered 1D matrix b is reshaped into the original data format for visualization or further analysis.
+#### Reshaping Results:
+- The recovered 1D matrix b is reshaped into the original data format for visualization or further analysis.
 
--------------------------------------------------------------------------
-RawBackProjection.m 
--------------------------------------------------------------------------
+---
+
+## 📁 RawBackProjection.m
 
 This code is to apply back-projection on the same dataset used in sparse recovery. Through simulating the random sampling it's the same as SparseRecovery.m, but this code uses a coordinates.csv file. It creates a 3D image domain, then it caluclates the round trip delay time between the focused cell and scan positions respectively. According to the delay value it pulls data from the related scan point, then sums them. It goes thorug every cell in the same way, then visualizes in both 2D layers and 3D.
 
--------------------------------------------------------------------------
-BPAonDatafromSparseRecovery.m
--------------------------------------------------------------------------
-It's the same logic as RawBackProjection.m, but the input comes from the found b value from the SparseRecovery.m. It reconstructs the response scan dataset by multiplying with the calculated Psi_total(in SparseRecovery.m), then converts it into a 2D dataset. Then applies back-projection.
+---
+
+## 📁 BPAonDatafromSparseRecovery.m
+
+- Follows the same backprojection logic as `RawBackProjection.m`.
+- Input: Reconstructed scan dataset from `b` in `SparseRecovery.m`.
+- Reconstructs scan data by multiplying `b` with `Psi_total`.
+- Converts it back to 2D scan matrix and applies backprojection.
