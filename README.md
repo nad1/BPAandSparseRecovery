@@ -1,16 +1,18 @@
 ## 📘 Citation & Acknowledgment
 
-This repository contains the source code associated with the following thesis:
+This repository contains the source code associated with the following thesis and paper:
 
 **Nihat Alperen Dayanir**  
 *GPR 3D Image Reconstruction with Sparse Recovery for Random Spatial Sampling*  
 Graduate College Dissertations and Theses. 1982, University of Vermont, 2025.  
 [https://scholarworks.uvm.edu/graddis/1982](https://scholarworks.uvm.edu/graddis/1982)
 
+Nihat Alperen Dayanir, Dryver Huston, and Tian Xia "Enhanced GPR 3D SAR imaging using sparse signal recovery and back-projection algorithms for spatially random samplings", Proc. SPIE 13456, Algorithms for Synthetic Aperture Radar Imagery XXXII, 1345604 (28 May 2025); https://doi.org/10.1117/12.3054143
+
 If you find this work helpful in your research or projects and would like to cite it,  
 please consider using the following citation:
 
-> Dayanir, Nihat Alperen. "GPR 3D Image Reconstruction with Sparse Recovery for Random Spatial Sampling." Graduate College Dissertations and Theses. 1982 (2025). [https://scholarworks.uvm.edu/graddis/1982](https://scholarworks.uvm.edu/graddis/1982)
+> Nihat Alperen Dayanir, Dryver Huston, and Tian Xia "Enhanced GPR 3D SAR imaging using sparse signal recovery and back-projection algorithms for spatially random samplings", Proc. SPIE 13456, Algorithms for Synthetic Aperture Radar Imagery XXXII, 1345604 (28 May 2025); https://doi.org/10.1117/12.3054143
 
 
 ---
