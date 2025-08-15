@@ -93,7 +93,7 @@ ysize = Nt;
 xsize = Q/layers;
 zsize = layers;
 
-zant = 0.02;
+zant = 0.02;  % In this work, gprMax data used so zant,xant,yant just follows the order the way I set them in the gprMax in file (it calculates in 3D space)
 
 % Initialize cell arrays for parfor
 Phi_total = sparse(M*Q, Nt*Q);
@@ -253,3 +253,4 @@ Image = reshape(b, Nt, Q); % The result in 2D
 % colormap('jet');
 % colorbar;
 %
+
