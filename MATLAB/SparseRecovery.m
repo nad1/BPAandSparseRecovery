@@ -1,13 +1,13 @@
 clear
 
 % Load data from CSV files
-data1 = readmatrix('C:\Users\nad\OneDrive\Masaüstü\gprMAX-Sar\3multi3d4nsz.csv');
-data2 = readmatrix('C:\Users\nad\OneDrive\Masaüstü\gprMAX-Sar\3multi3d4nsx.csv');
+data1 = readmatrix('C:\Users\nad\OneDrive\Masaüstü\alitest\3multi3d4nsz.csv');
+data2 = readmatrix('C:\Users\nad\OneDrive\Masaüstü\alitest\3multi3d4nsx.csv');
 
 %% If perfectly removing the direct coupling is desired, scan data from the same domain without any target can be used
 
-datadc_z = readmatrix('C:\Users\nad\OneDrive\Masaüstü\gprMAX-Sar\3multi3demptyz.csv');
-datadc_x = readmatrix('C:\Users\nad\OneDrive\Masaüstü\gprMAX-Sar\3multi3demptyx.csv');
+datadc_z = readmatrix('C:\Users\nad\OneDrive\Masaüstü\alitest\3multi3demptyz.csv');
+datadc_x = readmatrix('C:\Users\nad\OneDrive\Masaüstü\alitest\3multi3demptyx.csv');
 
 %% Summing data files, if 2 scan data files are being used
 
@@ -54,7 +54,7 @@ data = gpr_data_decimated;
 
 %% Selecting random scan points from the scan data
 
-randomascannumber = 49; % Number of a-scan points to be selected
+randomascannumber = 486; % Number of a-scan points to be selected
 originalMatrix = data;
 
 % Get the size of the original matrix
@@ -93,14 +93,15 @@ ysize = Nt;
 xsize = Q/layers;
 zsize = layers;
 
-zant = 0.02;  % In this work, gprMax data used so zant,xant,yant just follows the order the way I set them in the gprMax in file (it calculates in 3D space)
+zant = 0.02;
+initial_xa = 0.4; 
+initial_za = 0.2;
 
 % Initialize cell arrays for parfor
 Phi_total = sparse(M*Q, Nt*Q);
 Psi_total = sparse(Nt*Q, Nt*Q);
 Beta_total = sparse(M*Q, 1);
 
-norm_threshold = 0;%1e-10; % Set an appropriate threshold
 
 N = xsize*zsize;
 
@@ -114,17 +115,17 @@ parfor i = 1:(xsize*zsize)
     jth_cell = 1; % Initializing the jth cell counter
     Remaining = Q - i
 
-    xsi = 0.04 + mod((i-1), xsize)*(step_size); % Initialize xsi for each iteration
+    xsi = initial_xa + mod((i-1), xsize)*(step_size); % Initialize xsi for each iteration
     xri = xsi + antenna_offset;
-    zant = 0.02 + floor((i-1)/xsize) * step_size;
+    zant = initial_za + floor((i-1)/xsize) * step_size;
 
     for depth = 1:zsize
         for col = 1:xsize
             for row = 1:ysize
 
-                xa = 0.04 + (col-1)*step_size; % xa is the calculated cell's position
+                xa = initial_xa + (col-1)*step_size; % xa is the calculated cell's position
                 ya = (row-1)*time_step*(c/sqrt(er_ground)); % ya is the calculated cell's position
-                za = 0.02 + (depth-1)*(step_size);
+                za = initial_za + (depth-1)*(step_size);
 
                 % Calculating "Ti" delay time between the selected jth cell and ith antenna position
                 Ti = (sqrt((xa - xsi)^2 + ya^2 + (za-zant)^2) + sqrt((xa - xri)^2 + ya^2 + (za-zant)^2)) / (c / sqrt(er_ground));
@@ -188,8 +189,8 @@ data1d = reshape(data, Nt*Q, 1);
 
 
 % Save variables to a .mat file
-mat_filename = sprintf('random%d.mat', factor);
-save(mat_filename, 'Phi_total', 'Beta_total', 'data1d', 'Psi_total', 'Nt', 'Q', 'M', '-v7.3');
+%mat_filename = sprintf('random%d.mat', randomizer);
+%save(mat_filename, 'Phi_total', 'Beta_total', 'data1d', 'Psi_total', 'Nt', 'Q', 'M', '-v7.3');
 
 %% Dantzig selector with cross-validation
 
@@ -204,7 +205,7 @@ ThetaCV =  Psi_total;   % Cross-validation set, If using measuremrent matrix is 
 epsilon = alpha * norm(ThetaE' * zE, inf);
 b = zeros(size(ThetaE, 2), 1);
 
-% Iterative process
+%% Iterative process
 while true
     % Estimation of b
     cvx_begin
@@ -232,6 +233,10 @@ end
 
 Image = reshape(b, Nt, Q); % The result in 2D
 
+% Save variables to a .mat file
+% mat_filename = sprintf('random%d.mat', randomascannumber);
+% save(mat_filename, 'data', 'Image', 'data1d', 'Psi_total', 'Nt', 'Q', 'M', '-v7.3');
+
 
 %
 % % Plot results
@@ -253,4 +258,3 @@ Image = reshape(b, Nt, Q); % The result in 2D
 % colormap('jet');
 % colorbar;
 %
-
